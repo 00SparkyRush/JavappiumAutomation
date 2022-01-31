@@ -26,7 +26,18 @@ public class MainClassTest extends MainClass
     @Test
     public void testGetClassString()
     {
-        Assert.assertTrue("A program didn`t say Hello",
-                getClassString().toLowerCase().contains("hello"));
+        boolean lowercaseHello = getClassString().contains("hello");
+        boolean uppercaseHello = getClassString().contains("Hello");
+
+        if (lowercaseHello==false)
+        {
+            if (uppercaseHello==false)
+            {
+                Assert.fail("A program didn`t say Hello");
+            }
+        }
+
+        //Assert.assertTrue("A program didn`t say Hello",getClassString().contains("hello"));
+        //Assert.assertTrue("A program didn`t say Hello",getClassString().contains("Hello"));
     }
 }

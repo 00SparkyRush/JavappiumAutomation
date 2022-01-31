@@ -10,11 +10,13 @@ public class MainClass {
 
     public int getClassNumber()
     {
+
         return class_number;
     }
 
     public String getClassString()
     {
+
         return class_string;
     }
 }
