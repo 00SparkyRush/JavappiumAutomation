@@ -179,4 +179,62 @@ public class FirstTest extends WebDriverHelper {
         );
     }
 
+    @Test
+    public void testConfirmMultipleArticlesByKeyword()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No skip, looks like app does not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Couldn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "java",
+                "can`t enter search query"
+        );
+        waitForElementPresent(
+                By.xpath("//*[@class='android.view.ViewGroup']//*[@text = 'java']"),
+                "can`t find search result",
+                10);
+
+        int elements_overall_amount = driver.findElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']")).size();
+        int elements_with_keyword_amount = driver.findElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']//*[contains(@text, 'Java')]")).size();
+       Assert.assertTrue("not every result contains corresponding keyword",elements_with_keyword_amount == elements_overall_amount);
+    }
+
+    @Test
+    public void testSwipeArticle() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "java",
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "No article with such name"
+        );
+        WebElement title = waitForElementPresent(
+                By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
+                "Article didn`t open",
+                10);
+        swipeUpToFindElement(
+                By.xpath("//*[@resource-id = 'pcs-footer-container-legal']"),
+                "element does not exist at that page",
+                20
+        );
+
+    }
 }
