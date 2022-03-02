@@ -237,4 +237,96 @@ public class FirstTest extends WebDriverHelper {
         );
 
     }
+
+    @Test
+    public void testSaveFirstArticleToMyList()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "java",
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "No article with such name"
+        );
+        waitForElementPresent(
+                By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
+                "Article didn`t open",
+                10
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/article_menu_bookmark']"),
+                "Coudn`t save an article"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Coudn`t return back to search"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton"),
+                "Coudn`t return to main screen"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
+                "Coudn`t open saved articles"
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_reading_list_statistical_description"),
+                "Coudn`t open saved articles list"
+        );
+        waitForElementPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Can`t find an article in saved list",
+                5
+        );
+        swipeElementLeft(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "can`t delete an article"
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "article still present",
+                5
+        );
+    }
+
+    @Test
+    public void testamountOfNotEmptySearch()
+    {
+        String search_querry = "Linkin park discography";
+        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@class='android.view.ViewGroup']";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry,
+                "can`t find an element"
+        );
+        waitForElementPresent(
+                By.xpath(search_item_locator),
+                "Can`t find anything by request "+search_querry,
+                15
+        );
+        int amount_of_search_elements = getAmountOfElements(By.xpath(search_item_locator));
+        Assert.assertTrue(
+                "Too few results were found",
+               amount_of_search_elements >0
+        );
+    }
 }

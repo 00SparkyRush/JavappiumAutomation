@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Dictionary;
+import java.util.List;
 
 public class WebDriverHelper {
 
@@ -89,7 +90,12 @@ public class WebDriverHelper {
         int start_y =(int) (size.height * 0.8);
         int end_y =(int) (size.height * 0.2);
 
-        action.press(x,start_y).waitAction(timeOfSwipe).moveTo(x,end_y).release().perform();
+        action
+                .press(x,start_y)
+                .waitAction(timeOfSwipe)
+                .moveTo(x,end_y)
+                .release()
+                .perform();
     }
 
     public void quickSwipeUp()
@@ -110,5 +116,30 @@ public class WebDriverHelper {
             quickSwipeUp();
             already_swiped++;
         }
+    }
+
+    public void swipeElementLeft( By by, String error_message)
+    {
+        WebElement element = waitForElementPresent(by, error_message, 10);
+
+        int left_x = element.getLocation().getX();
+        int right_x = left_x + element.getSize().getWidth();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y  + lower_y) / 2;
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(right_x, middle_y)
+                .waitAction(150)
+                .moveTo(left_x, middle_y)
+                .release()
+                .perform();
+    }
+
+    public int getAmountOfElements(By by)
+    {
+        List elements =driver.findElements(by);
+        return elements.size();
     }
 }
