@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -31,6 +32,7 @@ public class FirstTest extends WebDriverHelper {
                 "C:/Users/kirill.minaev/Desktop/JavaAppiumAutomation/apks/org.wikipedia_50391_apps.evozi.com.apk"); //path to apk
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
     @After
@@ -300,10 +302,10 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public void testamountOfNotEmptySearch()
+    public void testAmountOfNotEmptySearch()
     {
         String search_querry = "Linkin park discography";
-        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@class='android.view.ViewGroup']";
+        String search_item_locator =  "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
@@ -327,6 +329,91 @@ public class FirstTest extends WebDriverHelper {
         Assert.assertTrue(
                 "Too few results were found",
                amount_of_search_elements >0
+        );
+    }
+
+    @Test
+    public void testAmountofEmtySearch()
+    {
+        String search_querry = "fsfghgfhrg";
+        String search_item_locator =  "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+        String empty_result_label = "//*[@text='No results']";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No skip, looks like app does not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Couldn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry,
+                "can`t find an element"
+        );
+        waitForElementPresent(
+                By.xpath(empty_result_label),
+                "Can`t find 'No results' by request "+search_querry,
+                15
+        );
+        assertElementNotPresent(
+                By.xpath(search_item_locator),
+                "Found some results by request "+ search_querry);
+    }
+
+    @Test
+    public void testChangeScreenOrientationOnSearchResults()
+    {
+        String search_querry = "java";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry,
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "No article with such name by request "+search_querry,
+                15
+        );
+        String title_before_rotatoin = waitForElementAndGetAttribute(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "text",
+                "can`t find article title",
+                15
+        );
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        String title_after_rotatoin = waitForElementAndGetAttribute(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "text",
+                "can`t find article title",
+                15
+        );
+        Assert.assertEquals(
+                "title changed after rotatoin",
+                title_before_rotatoin,
+                title_after_rotatoin
+        );
+        driver.rotate(ScreenOrientation.PORTRAIT);
+        String title_after_second_rotatoin = waitForElementAndGetAttribute(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "text",
+                "can`t find article title",
+                15
+        );
+        Assert.assertEquals(
+                "title changed after rotatoin",
+                title_before_rotatoin,
+                title_after_second_rotatoin
         );
     }
 }

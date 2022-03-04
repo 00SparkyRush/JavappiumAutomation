@@ -142,4 +142,21 @@ public class WebDriverHelper {
         List elements =driver.findElements(by);
         return elements.size();
     }
+
+    public void assertElementNotPresent(By by, String error_message)
+    {
+        int amount_of_elements = getAmountOfElements(by);
+
+        if (amount_of_elements > 0)
+        {
+            String default_message = "An element "+by.toString()+" supposed to be not present";
+            throw new AssertionError(default_message + " "+ error_message);
+        }
+    }
+
+    public String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeputInSeconds)
+    {
+        WebElement element = waitForElementPresent(by,error_message,timeputInSeconds);
+        return element.getAttribute(attribute);
+    }
 }
