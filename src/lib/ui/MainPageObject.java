@@ -1,6 +1,7 @@
+package lib.ui;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
-import org.apache.xerces.util.DOMEntityResolverWrapper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -8,12 +9,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Dictionary;
 import java.util.List;
 
-public class WebDriverHelper {
+public class MainPageObject {
 
-    public AppiumDriver driver;
+    protected AppiumDriver driver;
+
+    public MainPageObject(AppiumDriver driver)
+    {
+        this.driver = driver;
+    }
 
     public WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {

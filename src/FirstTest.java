@@ -1,61 +1,39 @@
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
+import lib.CoreTestCase;
+import lib.ui.MainPageObject;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
+public class FirstTest extends CoreTestCase {
+    private MainPageObject MainPageObject;
 
-public class FirstTest extends WebDriverHelper {
-
-
-    @Before
-    public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "AndroidTestDevicce");
-        capabilities.setCapability("platformVersion", "8.0"); //AndroidOS version
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app",
-                "C:/Users/kirill.minaev/Desktop/JavaAppiumAutomation/apks/org.wikipedia_50391_apps.evozi.com.apk"); //path to apk
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        driver.rotate(ScreenOrientation.PORTRAIT);
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        MainPageObject = new MainPageObject(driver);
     }
 
-    @After
-    public void tearDown() {
-        driver.quit();
-    }
 
     @Test
-    public void firstTest() {
-        waitForElementAndClick(
+    public void testSearch() {
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start",
                 2);
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh",
                 2
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t find an element",
                 2
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//*[@class='android.view.ViewGroup']//*[@text= 'Object-oriented programming language']"),
                 "can`t find search result",
                 5);
@@ -63,30 +41,30 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testCancelSearch() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start",
                 2);
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "couldn`t find search container",
                 2);
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t find an element"
         );
-        waitForElementAndClear(
+        MainPageObject.waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
                 "can`t clear the field",
                 5
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@class = 'android.widget.ImageButton']"),
                 "couldn`t find back button",
                 2
         );
-        waitForElementNotPresent(
+        MainPageObject.waitForElementNotPresent(
                 By.xpath("//*[@class = 'android.widget.ImageButton']"),
                 "Element shouldn`t be there but was found",
                 2
@@ -97,24 +75,24 @@ public class FirstTest extends WebDriverHelper {
    /* @Test
     public void testCompareArticleTitle()
     {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "No article with such name"
         );
-        WebElement title = waitForElementPresent(
+        WebElement title = MainPageObject.waitForElementPresent(
                 By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
                 "Article didn`t open",
                 10);
@@ -128,15 +106,15 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testSearchFieldText() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        assertElementHasText(
+        MainPageObject.assertElementHasText(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Search Wikipedia",
                 "An element has no text 'Search Wikipedia'"
@@ -145,29 +123,29 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testSearchMultipleArticesAndClear() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No skip, looks like app does not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Couldn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t enter search query"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.view.ViewGroup[2]"),
                 "search returns only one result",
                 10);
-        waitForElementAndClear(
+        MainPageObject.waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
                 "can`t clear the field",
                 5
         );
-        waitForElementNotPresent(
+        MainPageObject.waitForElementNotPresent(
                 By.xpath("//android.view.ViewGroup[1]"),
                 "search field was not cleared",
                 10
@@ -176,20 +154,20 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testConfirmMultipleArticlesByKeyword() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No skip, looks like app does not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Couldn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t enter search query"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//*[@class='android.view.ViewGroup']//*[@text = 'java']"),
                 "can`t find search result",
                 10);
@@ -203,28 +181,28 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testSwipeArticle() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "No article with such name"
         );
-        WebElement title = waitForElementPresent(
-                By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
+        WebElement title = MainPageObject.waitForElementPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
                 "Article didn`t open",
                 10);
-        swipeUpToFindElement(
+        MainPageObject.swipeUpToFindElement(
                 By.xpath("//*[@resource-id = 'pcs-footer-container-legal']"),
                 "element does not exist at that page",
                 20
@@ -234,58 +212,58 @@ public class FirstTest extends WebDriverHelper {
 
     @Test
     public void testSaveFirstArticleToMyList() {
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "java",
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "No article with such name"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
                 "Article didn`t open",
                 10
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/article_menu_bookmark']"),
                 "Coudn`t save an article"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
                 "Coudn`t return back to search"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton"),
                 "Coudn`t return to main screen"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
                 "Coudn`t open saved articles"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.id("org.wikipedia:id/item_reading_list_statistical_description"),
                 "Coudn`t open saved articles list"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath("//*[@text='Java (programming language)']"),
                 "Can`t find an article in saved list",
                 5
         );
-        swipeElementLeft(
+        MainPageObject.swipeElementLeft(
                 By.xpath("//*[@text='Java (programming language)']"),
                 "can`t delete an article"
         );
-        waitForElementNotPresent(
+        MainPageObject.waitForElementNotPresent(
                 By.xpath("//*[@text='Java (programming language)']"),
                 "article still present",
                 5
@@ -297,25 +275,25 @@ public class FirstTest extends WebDriverHelper {
         String search_querry = "Linkin park discography";
         String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry,
                 "can`t find an element"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(search_item_locator),
                 "Can`t find anything by request " + search_querry,
                 15
         );
-        int amount_of_search_elements = getAmountOfElements(By.xpath(search_item_locator));
+        int amount_of_search_elements = MainPageObject.getAmountOfElements(By.xpath(search_item_locator));
         Assert.assertTrue(
                 "Too few results were found",
                 amount_of_search_elements > 0
@@ -328,25 +306,25 @@ public class FirstTest extends WebDriverHelper {
         String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
         String empty_result_label = "//*[@text='No results']";
 
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No skip, looks like app does not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Couldn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry,
                 "can`t find an element"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(empty_result_label),
                 "Can`t find 'No results' by request " + search_querry,
                 15
         );
-        assertElementNotPresent(
+        MainPageObject.assertElementNotPresent(
                 By.xpath(search_item_locator),
                 "Found some results by request " + search_querry);
     }
@@ -355,32 +333,32 @@ public class FirstTest extends WebDriverHelper {
     public void testChangeScreenOrientationOnSearchResults() {
         String search_querry = "java";
 
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry,
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "No article with such name by request " + search_querry,
                 15
         );
-        String title_before_rotatoin = waitForElementAndGetAttribute(
+        String title_before_rotatoin =MainPageObject.waitForElementAndGetAttribute(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "text",
                 "can`t find article title",
                 15
         );
         driver.rotate(ScreenOrientation.LANDSCAPE);
-        String title_after_rotatoin = waitForElementAndGetAttribute(
+        String title_after_rotatoin = MainPageObject.waitForElementAndGetAttribute(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "text",
                 "can`t find article title",
@@ -392,7 +370,7 @@ public class FirstTest extends WebDriverHelper {
                 title_after_rotatoin
         );
         driver.rotate(ScreenOrientation.PORTRAIT);
-        String title_after_second_rotatoin = waitForElementAndGetAttribute(
+        String title_after_second_rotatoin = MainPageObject.waitForElementAndGetAttribute(
                 By.xpath("//*[@text = 'Java (programming language)']"),
                 "text",
                 "can`t find article title",
@@ -415,90 +393,90 @@ public class FirstTest extends WebDriverHelper {
         String save_button_xpath_locator = "//*[@resource-id='org.wikipedia:id/article_menu_bookmark']";
         String navigate_up_button_xpath_locator = "//android.widget.ImageButton[@content-desc='Navigate up']";
 
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry1,
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(article1_title_xpath_locator),
                 "No article with such name"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(article1_title_xpath_locator),
                 "Article didn`t open",
                 10
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(save_button_xpath_locator),
                 "Coudn`t save an article"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(navigate_up_button_xpath_locator),
                 "Coudn`t return back to search"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry2,
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(article2_title_xpath_locator),
                 "No article with such name"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(article2_title_xpath_locator),
                 "Article didn`t open",
                 10
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(save_button_xpath_locator),
                 "Coudn`t save an article"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(navigate_up_button_xpath_locator),
                 "Coudn`t return back to search"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton"),
                 "Coudn`t return to main screen"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
                 "Coudn`t open saved articles"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.id("org.wikipedia:id/item_reading_list_statistical_description"),
                 "Coudn`t open saved articles list"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(article1_title_xpath_locator),
                 "Can`t find an article in saved list",
                 5
         );
-        swipeElementLeft(
+        MainPageObject.swipeElementLeft(
                 By.xpath(article1_title_xpath_locator),
                 "can`t delete an article"
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(article2_title_xpath_locator),
                 "Can`t find an article in saved list",
                 5
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(article2_title_xpath_locator),
                 "can`t open saved article",
                 5
         );
-        waitForElementPresent(
+        MainPageObject.waitForElementPresent(
                 By.xpath(article2_title_xpath_locator),
                 "Can`t find an article in saved list",
                 15
@@ -512,26 +490,58 @@ public class FirstTest extends WebDriverHelper {
         String article1_title_xpath_locator = "//android.widget.TextView[@text='Java (programming language)']";
         String general_title_xpath_locator = "//android.view.View[1]";
 
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Coudn`t find wiki searh"
         );
-        waitForElementAndSendKeys(
+        MainPageObject.waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 search_querry1,
                 "can`t find an element"
         );
-        waitForElementAndClick(
+        MainPageObject.waitForElementAndClick(
                 By.xpath(article1_title_xpath_locator),
                 "No article with such name"
         );
-        assertElementPresent(
+        MainPageObject.assertElementPresent(
                 By.xpath(general_title_xpath_locator),
                 "an article has no title"
+        );
+    }
+
+    @Test
+    public void testCheckSearchArticleInBackground()
+    {
+        String search_querry1 = "java";
+        String article1_title_xpath_locator = "//android.widget.TextView[@text='Java (programming language)']";
+
+        MainPageObject.waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        MainPageObject.waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        MainPageObject.waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry1,
+                "can`t find an element"
+        );
+        MainPageObject.waitForElementPresent(
+                By.xpath(article1_title_xpath_locator),
+                "Can`t find an article in search list",
+                5
+        );
+        driver.runAppInBackground(2);
+        MainPageObject.waitForElementPresent(
+                By.xpath(article1_title_xpath_locator),
+                "Can`t find an article in search list afteer returning from background",
+                5
         );
     }
 }
