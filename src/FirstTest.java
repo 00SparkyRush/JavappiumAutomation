@@ -16,10 +16,8 @@ import java.net.URL;
 public class FirstTest extends WebDriverHelper {
 
 
-
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability("platformName", "Android");
@@ -36,14 +34,12 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
         driver.quit();
     }
 
     @Test
-    public void firstTest()
-    {
+    public void firstTest() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start",
@@ -66,8 +62,7 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public  void testCancelSearch()
-    {
+    public void testCancelSearch() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start",
@@ -132,8 +127,7 @@ public class FirstTest extends WebDriverHelper {
     }*/
 
     @Test
-    public void testSearchFieldText()
-    {
+    public void testSearchFieldText() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
@@ -150,8 +144,7 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public void testSearchMultipleArticesAndClear()
-    {
+    public void testSearchMultipleArticesAndClear() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No skip, looks like app does not start"
@@ -182,8 +175,7 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public void testConfirmMultipleArticlesByKeyword()
-    {
+    public void testConfirmMultipleArticlesByKeyword() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No skip, looks like app does not start"
@@ -206,7 +198,7 @@ public class FirstTest extends WebDriverHelper {
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']")).size();
         int elements_with_keyword_amount = driver.findElements(
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']//*[contains(@text, 'Java')]")).size();
-       Assert.assertTrue("not every result contains corresponding keyword",elements_with_keyword_amount == elements_overall_amount);
+        Assert.assertTrue("not every result contains corresponding keyword", elements_with_keyword_amount == elements_overall_amount);
     }
 
     @Test
@@ -241,8 +233,7 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public void testSaveFirstArticleToMyList()
-    {
+    public void testSaveFirstArticleToMyList() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
                 "No stip, looks like appdoes not start"
@@ -302,10 +293,9 @@ public class FirstTest extends WebDriverHelper {
     }
 
     @Test
-    public void testAmountOfNotEmptySearch()
-    {
+    public void testAmountOfNotEmptySearch() {
         String search_querry = "Linkin park discography";
-        String search_item_locator =  "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'SKIP')]"),
@@ -322,21 +312,20 @@ public class FirstTest extends WebDriverHelper {
         );
         waitForElementPresent(
                 By.xpath(search_item_locator),
-                "Can`t find anything by request "+search_querry,
+                "Can`t find anything by request " + search_querry,
                 15
         );
         int amount_of_search_elements = getAmountOfElements(By.xpath(search_item_locator));
         Assert.assertTrue(
                 "Too few results were found",
-               amount_of_search_elements >0
+                amount_of_search_elements > 0
         );
     }
 
     @Test
-    public void testAmountofEmtySearch()
-    {
+    public void testAmountofEmtySearch() {
         String search_querry = "fsfghgfhrg";
-        String search_item_locator =  "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
+        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
         String empty_result_label = "//*[@text='No results']";
 
         waitForElementAndClick(
@@ -354,17 +343,16 @@ public class FirstTest extends WebDriverHelper {
         );
         waitForElementPresent(
                 By.xpath(empty_result_label),
-                "Can`t find 'No results' by request "+search_querry,
+                "Can`t find 'No results' by request " + search_querry,
                 15
         );
         assertElementNotPresent(
                 By.xpath(search_item_locator),
-                "Found some results by request "+ search_querry);
+                "Found some results by request " + search_querry);
     }
 
     @Test
-    public void testChangeScreenOrientationOnSearchResults()
-    {
+    public void testChangeScreenOrientationOnSearchResults() {
         String search_querry = "java";
 
         waitForElementAndClick(
@@ -382,7 +370,7 @@ public class FirstTest extends WebDriverHelper {
         );
         waitForElementAndClick(
                 By.xpath("//*[@text = 'Java (programming language)']"),
-                "No article with such name by request "+search_querry,
+                "No article with such name by request " + search_querry,
                 15
         );
         String title_before_rotatoin = waitForElementAndGetAttribute(
@@ -414,6 +402,106 @@ public class FirstTest extends WebDriverHelper {
                 "title changed after rotatoin",
                 title_before_rotatoin,
                 title_after_second_rotatoin
+        );
+    }
+
+    @Test
+    public void testSaveArticlesToMyList() {
+        String search_querry1 = "java";
+        String search_querry2 = "appium";
+        String article1_title_xpath_locator = "//android.widget.TextView[@text='Java (programming language)']";
+        String article2_title_xpath_locator = "//android.widget.TextView[@text='Appium']";
+
+        String save_button_xpath_locator = "//*[@resource-id='org.wikipedia:id/article_menu_bookmark']";
+        String navigate_up_button_xpath_locator = "//android.widget.ImageButton[@content-desc='Navigate up']";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry1,
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath(article1_title_xpath_locator),
+                "No article with such name"
+        );
+        waitForElementPresent(
+                By.xpath(article1_title_xpath_locator),
+                "Article didn`t open",
+                10
+        );
+        waitForElementAndClick(
+                By.xpath(save_button_xpath_locator),
+                "Coudn`t save an article"
+        );
+        waitForElementAndClick(
+                By.xpath(navigate_up_button_xpath_locator),
+                "Coudn`t return back to search"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry2,
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath(article2_title_xpath_locator),
+                "No article with such name"
+        );
+        waitForElementPresent(
+                By.xpath(article2_title_xpath_locator),
+                "Article didn`t open",
+                10
+        );
+        waitForElementAndClick(
+                By.xpath(save_button_xpath_locator),
+                "Coudn`t save an article"
+        );
+        waitForElementAndClick(
+                By.xpath(navigate_up_button_xpath_locator),
+                "Coudn`t return back to search"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton"),
+                "Coudn`t return to main screen"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
+                "Coudn`t open saved articles"
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_reading_list_statistical_description"),
+                "Coudn`t open saved articles list"
+        );
+        waitForElementPresent(
+                By.xpath(article1_title_xpath_locator),
+                "Can`t find an article in saved list",
+                5
+        );
+        swipeElementLeft(
+                By.xpath(article1_title_xpath_locator),
+                "can`t delete an article"
+        );
+        waitForElementPresent(
+                By.xpath(article2_title_xpath_locator),
+                "Can`t find an article in saved list",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath(article2_title_xpath_locator),
+                "can`t open saved article",
+                5
+        );
+        waitForElementPresent(
+                By.xpath(article2_title_xpath_locator),
+                "Can`t find an article in saved list",
+                15
         );
     }
 }
