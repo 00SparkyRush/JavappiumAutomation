@@ -504,4 +504,34 @@ public class FirstTest extends WebDriverHelper {
                 15
         );
     }
+
+    @Test
+    public void testAssertArticleHasTitle()
+    {
+        String search_querry1 = "java";
+        String article1_title_xpath_locator = "//android.widget.TextView[@text='Java (programming language)']";
+        String general_title_xpath_locator = "//android.view.View[1]";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "No stip, looks like appdoes not start"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Coudn`t find wiki searh"
+        );
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                search_querry1,
+                "can`t find an element"
+        );
+        waitForElementAndClick(
+                By.xpath(article1_title_xpath_locator),
+                "No article with such name"
+        );
+        assertElementPresent(
+                By.xpath(general_title_xpath_locator),
+                "an article has no title"
+        );
+    }
 }
