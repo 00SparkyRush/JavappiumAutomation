@@ -1,10 +1,12 @@
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
+
 
 public class FirstTest extends CoreTestCase {
     private MainPageObject MainPageObject;
@@ -18,196 +20,56 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start",
-                2);
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh",
-                2
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t find an element",
-                2
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@class='android.view.ViewGroup']//*[@text= 'Object-oriented programming language']"),
-                "can`t find search result",
-                5);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
 
     @Test
     public void testCancelSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start",
-                2);
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "couldn`t find search container",
-                2);
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "can`t clear the field",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@class = 'android.widget.ImageButton']"),
-                "couldn`t find back button",
-                2
-        );
-        MainPageObject.waitForElementNotPresent(
-                By.xpath("//*[@class = 'android.widget.ImageButton']"),
-                "Element shouldn`t be there but was found",
-                2
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
 
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.waitFroCancelButtonToAppear();
+        SearchPageObject.clickCancelButton();
+        SearchPageObject.waitFroCancelButtonToDisappear();
     }
 
-   /* @Test
+    @Test
     public void testCompareArticleTitle()
     {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'Java (programming language)']"),
-                "No article with such name"
-        );
-        WebElement title = MainPageObject.waitForElementPresent(
-                By.xpath("//android.view.View[@content-desc='Java (programming language)']"),
-                "Article didn`t open",
-                10);
-        String article_title = title.getAttribute("content-desc");
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        String article_title = ArticlePageObject.getArticleTitle();
+
         Assert.assertEquals(
                 "could not find article title",
                 "Java (programming language)",
                 article_title
                 );
-    }*/
-
-    @Test
-    public void testSearchFieldText() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.assertElementHasText(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Search Wikipedia",
-                "An element has no text 'Search Wikipedia'"
-        );
-    }
-
-    @Test
-    public void testSearchMultipleArticesAndClear() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No skip, looks like app does not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Couldn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t enter search query"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//android.view.ViewGroup[2]"),
-                "search returns only one result",
-                10);
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "can`t clear the field",
-                5
-        );
-        MainPageObject.waitForElementNotPresent(
-                By.xpath("//android.view.ViewGroup[1]"),
-                "search field was not cleared",
-                10
-        );
-    }
-
-    @Test
-    public void testConfirmMultipleArticlesByKeyword() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No skip, looks like app does not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Couldn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t enter search query"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@class='android.view.ViewGroup']//*[@text = 'java']"),
-                "can`t find search result",
-                10);
-
-        int elements_overall_amount = driver.findElements(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']")).size();
-        int elements_with_keyword_amount = driver.findElements(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']//*[contains(@text, 'Java')]")).size();
-        Assert.assertTrue("not every result contains corresponding keyword", elements_with_keyword_amount == elements_overall_amount);
     }
 
     @Test
     public void testSwipeArticle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'Java (programming language)']"),
-                "No article with such name"
-        );
-        WebElement title = MainPageObject.waitForElementPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Article didn`t open",
-                10);
-        MainPageObject.swipeUpToFindElement(
-                By.xpath("//*[@resource-id = 'pcs-footer-container-legal']"),
-                "element does not exist at that page",
-                20
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
 
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.swipeToFooter();
     }
 
     @Test

@@ -20,6 +20,16 @@ public class MainPageObject {
         this.driver = driver;
     }
 
+    public WebElement skipInitialLanguageSelect()
+    {
+        WebElement element = waitForElementPresent(
+                By.xpath("//*[contains(@text, 'SKIP')]"),
+                "Can`t perform initial skip",
+                2);
+         element.click();
+         return element;
+    }
+
     public WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
