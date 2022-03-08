@@ -8,7 +8,9 @@ public class ArticlePageObject extends MainPageObject{
 
     private static final String
             TITLE = "//android.widget.TextView[1]",
-            FOOTER_ELEMENT = "//*[@text = 'View article in browser']";
+            FOOTER_ELEMENT = "//*[@text = 'View article in browser']",
+            ADD_TO_SAVED_LIST_ELEMENT = "org.wikipedia:id/article_menu_bookmark",
+            BACK_BUTTON_ELEMENT = "//android.widget.ImageButton[@content-desc='Navigate up']";
 
 
     public ArticlePageObject(AppiumDriver driver)
@@ -35,5 +37,20 @@ public class ArticlePageObject extends MainPageObject{
                 By.xpath(FOOTER_ELEMENT),
                 "can`t find article end",
                 20);
+    }
+    public void addArticleToSavedList()
+    {
+        this.waitForElementAndClick(
+                By.id(ADD_TO_SAVED_LIST_ELEMENT),
+                "Coudn`t save an article"
+        );
+    }
+
+    public void goBackFromArticle()
+    {
+        this.waitForElementAndClick(
+                By.xpath(BACK_BUTTON_ELEMENT),
+                "Coudn`t return back to search"
+        );
     }
 }

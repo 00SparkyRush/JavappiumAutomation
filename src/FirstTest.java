@@ -1,7 +1,5 @@
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -74,62 +72,25 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testSaveFirstArticleToMyList() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "java",
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@text = 'Java (programming language)']"),
-                "No article with such name"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//android.widget.TextView[@text='Java (programming language)']"),
-                "Article didn`t open",
-                10
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/article_menu_bookmark']"),
-                "Coudn`t save an article"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
-                "Coudn`t return back to search"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton"),
-                "Coudn`t return to main screen"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
-                "Coudn`t open saved articles"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/item_reading_list_statistical_description"),
-                "Coudn`t open saved articles list"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Can`t find an article in saved list",
-                5
-        );
-        MainPageObject.swipeElementLeft(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "can`t delete an article"
-        );
-        MainPageObject.waitForElementNotPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "article still present",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        NavigationUI NavigationUI = new NavigationUI(driver);
+        SavedArticlesPageObject SavedArticlesPageObject = new SavedArticlesPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        ArticlePageObject.waitForTitleElement();
+
+        String article_title = ArticlePageObject.getArticleTitle();
+
+        ArticlePageObject.addArticleToSavedList();
+        ArticlePageObject.goBackFromArticle();
+        NavigationUI.goBackFromSearch();
+        NavigationUI.goToSavedArticles();
+        SavedArticlesPageObject.openSavedArticlesList();
+        SavedArticlesPageObject.deleteArticleByTitleWithSwipe(article_title);
     }
 
     @Test
@@ -245,105 +206,6 @@ public class FirstTest extends CoreTestCase {
         );
     }
 
-    @Test
-    public void testSaveArticlesToMyList() {
-        String search_querry1 = "java";
-        String search_querry2 = "appium";
-        String article1_title_xpath_locator = "//android.widget.TextView[@text='Java (programming language)']";
-        String article2_title_xpath_locator = "//android.widget.TextView[@text='Appium']";
-
-        String save_button_xpath_locator = "//*[@resource-id='org.wikipedia:id/article_menu_bookmark']";
-        String navigate_up_button_xpath_locator = "//android.widget.ImageButton[@content-desc='Navigate up']";
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                search_querry1,
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(article1_title_xpath_locator),
-                "No article with such name"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(article1_title_xpath_locator),
-                "Article didn`t open",
-                10
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(save_button_xpath_locator),
-                "Coudn`t save an article"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(navigate_up_button_xpath_locator),
-                "Coudn`t return back to search"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                search_querry2,
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(article2_title_xpath_locator),
-                "No article with such name"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(article2_title_xpath_locator),
-                "Article didn`t open",
-                10
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(save_button_xpath_locator),
-                "Coudn`t save an article"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(navigate_up_button_xpath_locator),
-                "Coudn`t return back to search"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton"),
-                "Coudn`t return to main screen"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
-                "Coudn`t open saved articles"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/item_reading_list_statistical_description"),
-                "Coudn`t open saved articles list"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(article1_title_xpath_locator),
-                "Can`t find an article in saved list",
-                5
-        );
-        MainPageObject.swipeElementLeft(
-                By.xpath(article1_title_xpath_locator),
-                "can`t delete an article"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(article2_title_xpath_locator),
-                "Can`t find an article in saved list",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath(article2_title_xpath_locator),
-                "can`t open saved article",
-                5
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(article2_title_xpath_locator),
-                "Can`t find an article in saved list",
-                15
-        );
-    }
 
     @Test
     public void testAssertArticleHasTitle()
