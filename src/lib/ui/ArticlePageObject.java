@@ -53,4 +53,10 @@ public class ArticlePageObject extends MainPageObject{
                 "Coudn`t return back to search"
         );
     }
+    public void assertArticleHasTitle()
+    {
+        this.assertElementPresent(
+                By.xpath(TITLE),
+        "An article has no title");
+    }
 }

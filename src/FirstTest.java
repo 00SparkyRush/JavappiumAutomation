@@ -96,60 +96,35 @@ public class FirstTest extends CoreTestCase {
     @Test
     public void testAmountOfNotEmptySearch() {
         String search_querry = "Linkin park discography";
-        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No stip, looks like appdoes not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Coudn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                search_querry,
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(search_item_locator),
-                "Can`t find anything by request " + search_querry,
-                15
-        );
-        int amount_of_search_elements = MainPageObject.getAmountOfElements(By.xpath(search_item_locator));
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_querry);
+
+        int amount_of_search_elements = SearchPageObject.getAmountOfFoundArticles();
+
         Assert.assertTrue(
                 "Too few results were found",
                 amount_of_search_elements > 0
         );
+
+
+
     }
 
     @Test
     public void testAmountofEmtySearch() {
         String search_querry = "fsfghgfhrg";
-        String search_item_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']";
-        String empty_result_label = "//*[@text='No results']";
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'SKIP')]"),
-                "No skip, looks like app does not start"
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Couldn`t find wiki searh"
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                search_querry,
-                "can`t find an element"
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath(empty_result_label),
-                "Can`t find 'No results' by request " + search_querry,
-                15
-        );
-        MainPageObject.assertElementNotPresent(
-                By.xpath(search_item_locator),
-                "Found some results by request " + search_querry);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_querry);
+        SearchPageObject.waitForEmptyResultsLabel();
+        SearchPageObject.assertThereIsNoResult();
     }
 
     @Test

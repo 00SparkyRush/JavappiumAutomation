@@ -56,4 +56,15 @@ public class SavedArticlesPageObject extends MainPageObject {
         );
         this.waitForArticletoDissapearByTitle(title);
     }
+    public void openArticleByTitle(String title)
+    {
+        String title_by_subsstring = getArticleTitle(title);
+
+        this.waitForArticletoApearByTitle(title);
+        this.waitForElementAndClick(
+                By.xpath(title_by_subsstring),
+                "can`t open saved article",
+                15
+        );
+    }
 }

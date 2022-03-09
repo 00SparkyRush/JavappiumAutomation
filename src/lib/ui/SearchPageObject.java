@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 public class SearchPageObject extends MainPageObject{
@@ -11,7 +12,9 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_CANCEL_BUTTON = "//*[@class = 'android.widget.ImageButton']",
             SEARCH_RESULT = "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@class='android.view.ViewGroup']//*[@text= '{SUBSTRING}']",
-            SERARH_RESULT_CONTAINING_SUBSTRING_TPL = "//*[@class='android.view.ViewGroup']//*[contains(@text, '{SUBSTRING}')]";
+            SERARH_RESULT_CONTAINING_SUBSTRING_TPL = "//*[@class='android.view.ViewGroup']//*[contains(@text, '{SUBSTRING}')]",
+            SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']//*[@resource-id='org.wikipedia:id/page_list_item_title']",
+            EMPTY_RESULTS_LABEL = "//*[@text='No results']";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -134,5 +137,30 @@ public class SearchPageObject extends MainPageObject{
                 "can`t clear search input field",
                 5
         );
+    }
+
+    public int getAmountOfFoundArticles()
+    {
+        this.waitForElementPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "Can`t find anything by request ",
+                15
+        );
+        return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT ));
+    }
+
+    public void waitForEmptyResultsLabel()
+    {
+        this.waitForElementPresent(
+                By.xpath(EMPTY_RESULTS_LABEL),
+                "Can`t find 'No results' label",
+                15
+        );
+    }
+    public void assertThereIsNoResult()
+    {
+        this.assertElementNotPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "there are some search results");
     }
 }
