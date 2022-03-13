@@ -113,5 +113,26 @@ public class TestsByExersizes extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring("Java (programming language)");
         ArticlePageObject.assertArticleHasTitle();
     }
+
+    @Test
+    public void testConfirmFirstThreeResultsOfSearch()
+    {
+        String title_result1 = "java";
+        String description_result1 = "Island in Southeast Asia";
+        String title_result2 = "JavaScript";
+        String description_result2 = "High-level programming language";
+        String title_result3 = "Java (programming language)";
+        String description_result3 = "Object-oriented programming language";
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        MainPageObject.skipInitialLanguageSelect();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("java");
+        SearchPageObject.waitForAnySearchResult();
+        SearchPageObject.waitForElementByTitleAndDescription(title_result1, description_result1);
+        SearchPageObject.waitForElementByTitleAndDescription(title_result2, description_result2);
+        SearchPageObject.waitForElementByTitleAndDescription(title_result3, description_result3);
+    }
 }
 
